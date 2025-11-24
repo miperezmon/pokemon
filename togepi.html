@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Togepi - Pokédex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF69B4;
+            --secondary: #FF1493;
+            --accent: #FFB6C1;
+            --bg-light: #FFE4F0;
+            --bg-dark: #FFB6D9;
+            --text: #2c3e50;
+            --border: #FF69B4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE4F0 0%, #FFB6D9 50%, #FFC0CB 100%);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pokemon-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            color: var(--primary);
+            text-shadow: 3px 3px 0px var(--secondary), 6px 6px 0px rgba(0, 0, 0, 0.2);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .pokemon-number {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border: 3px solid var(--border);
+        }
+
+        .pokemon-image-container {
+            background: linear-gradient(135deg, #FF69B4, #FF1493);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            border: 3px solid var(--border);
+        }
+
+        .pokemon-image {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .info-item {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+
+        .types {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .type-normal {
+            background: #A8A878;
+            color: white;
+        }
+
+        .type-fairy {
+            background: #FF69B4;
+            color: white;
+        }
+
+        .stats-container {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .stat-bar {
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .stat-bar-bg {
+            background: #E0E0E0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .abilities-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .ability-card {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px dashed var(--border);
+        }
+
+        .ability-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .ability-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .description-box {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 1.5rem 0;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .evolution-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 3px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .evolution-chain {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .evolution-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .evolution-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .evolution-arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .characteristics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .characteristic {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .char-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .char-label {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+
+        .char-value {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .pokemon-name {
+                font-size: 2.5rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .abilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evolution-chain {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="pokemon-name">TOGEPI</div>
+            <div class="pokemon-number">#175</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Imagen -->
+            <div class="pokemon-image-container">
+                <img src="pk2.png" alt="Togepi" class="pokemon-image">
+            </div>
+
+            <!-- Información General -->
+            <div class="card">
+                <div class="section-title">Información General</div>
+                
+                <div class="info-section">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Tipo</div>
+                            <div class="types">
+                                <span class="type-badge type-normal">Normal</span>
+                                <span class="type-badge type-fairy">Hada</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Altura</div>
+                            <div class="info-value">0.3 m</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Peso</div>
+                            <div class="info-value">1.5 kg</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Categoría</div>
+                            <div class="info-value">Pokémon Bebé</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="description-box">
+                    Togepi es un pequeño Pokémon huevo considerado un Pokémon bebé. Se cree que la punta del huevo le permite absorber felicidad de las personas. Vive en el interior de su caparazón protector.
+                </div>
+
+                <div class="info-section">
+                    <div class="section-title" style="margin-top: 1.5rem;">Características</div>
+                    <div class="characteristics">
+                        <div class="characteristic">
+                            <div class="char-icon">😊</div>
+                            <div class="char-label">Carácter</div>
+                            <div class="char-value">Tierno</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">✨</div>
+                            <div class="char-label">Habilidad</div>
+                            <div class="char-value">Recogida</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">🎂</div>
+                            <div class="char-label">Generación</div>
+                            <div class="char-value">II</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">🏠</div>
+                            <div class="char-label">Hábitat</div>
+                            <div class="char-value">Ciudades, Pueblos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="card full-width">
+            <div class="section-title">Estadísticas Base</div>
+            <div class="stats-container">
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>HP</span>
+                        <span>35</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 23%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Ataque</span>
+                        <span>40</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 27%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Defensa</span>
+                        <span>85</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 57%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Ataque Especial</span>
+                        <span>40</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 27%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Defensa Especial</span>
+                        <span>65</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 43%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Velocidad</span>
+                        <span>20</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 13%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Habilidades -->
+        <div class="card full-width">
+            <div class="section-title">Habilidades</div>
+            <div class="abilities-grid">
+                <div class="ability-card">
+                    <div class="ability-name">Recogida</div>
+                    <div class="ability-description">Puede recoger objetos que haya dejado un adversario en batalla. Habilidad común de Togepi.</div>
+                </div>
+                <div class="ability-card">
+                    <div class="ability-name">Movimiento Espejo</div>
+                    <div class="ability-description">Copia los movimientos del oponente. Habilidad oculta muy útil en batallas.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evolución -->
+        <div class="evolution-section">
+            <div class="section-title">Evolución</div>
+            <div class="evolution-chain">
+                <div class="evolution-item">
+                    <div class="evolution-name">Togepi</div>
+                    <img src="70px-Togepi.png" >
+                    <div style="color: #666; font-size: 0.9rem;">Forma Inicial</div>
+                </div>
+                <div style="font-size: 2rem; color: #FF1493; align-self: center;">→</div>
+                <div class="evolution-item">
+                    <div class="evolution-name">Togetic</div>
+                    <img src="90px-Togetic.png" >
+                    <div style="color: #666; font-size: 0.9rem;">Forma Media</div>
+                </div>
+                <div style="font-size: 2rem; color: #FF1493; align-self: center;">→</div>
+                <div class="evolution-item">
+                    <div class="evolution-name">Togekiss</div>
+                    <img src="150px-Togekiss.png" >
+                    <div style="color: #666; font-size: 0.9rem;">Forma Final</div>
+                </div>
+            </div>
+            <div class="description-box" style="margin-top: 1.5rem;">
+                ℹ️ Togepi evoluciona a Togetic cuando desarrolla suficiente amistad con su entrenador. Posteriormente, puede evolucionar a Togekiss usando una Piedra Dia. Togekiss es la forma final de la familia y tiene alas visibles.
+            </div>
+        </div>
+
+        <!-- Movimientos Especiales -->
+        <div class="card full-width">
+            <div class="section-title">Movimientos Especiales</div>
+            <div class="moves-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FF69B4;">
+                    <div style="font-weight: 700; color: #FF1493;">Encanto</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 0 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Reduce el Ataque del oponente con encanto.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FF69B4;">
+                    <div style="font-weight: 700; color: #FF1493;">Sonajero</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 30 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Ataque de ruido que confunde al oponente.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FF69B4;">
+                    <div style="font-weight: 700; color: #FF1493;">Rizo Defensa</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 0 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Aumenta la Defensa de Togepi.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FF69B4;">
+                    <div style="font-weight: 700; color: #FF1493;">Defensa Lunar</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Hada | Poder: 0 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Aumenta la Defensa Especial de Togepi.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FF69B4;">
+                    <div style="font-weight: 700; color: #FF1493;">Metronomo</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 0 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Ejecuta un movimiento aleatorio de otro Pokémon.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FF69B4;">
+                    <div style="font-weight: 700; color: #FF1493;">Saludo</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 0 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Saluda amistosamente al oponente.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Localizaciones -->
+        <div class="card full-width">
+            <div class="section-title">Localizaciones en Juegos</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF1493;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Oro/Plata/Cristal</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Huevo de Togepi<br>
+                        <strong>Nivel:</strong> 1<br>
+                        <strong>Rareza:</strong> Especial
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF1493;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Diamante/Perla</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 230, Cementerio Recuerdo<br>
+                        <strong>Nivel:</strong> 23-25<br>
+                        <strong>Rareza:</strong> Raro
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF1493;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Platino</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 230<br>
+                        <strong>Nivel:</strong> 20-25<br>
+                        <strong>Rareza:</strong> Raro
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF1493;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">X/Y</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 5, Ruta 6<br>
+                        <strong>Nivel:</strong> 10-15<br>
+                        <strong>Rareza:</strong> Poco común
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF1493;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Sol/Luna</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Pradera Poni<br>
+                        <strong>Nivel:</strong> 25-30<br>
+                        <strong>Rareza:</strong> Raro
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF1493;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Espada/Escudo</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Natura Silvestre<br>
+                        <strong>Nivel:</strong> 15-20<br>
+                        <strong>Rareza:</strong> Poco común
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Datos Curiosos -->
+        <div class="card full-width">
+            <div class="section-title">Datos Curiosos</div>
+            <div style="display: grid; gap: 1rem;">
+                <div style="background: linear-gradient(135deg, #FFE4F0, #FFB6D9); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1493;">
+                    <div style="font-weight: 700; color: #FF1493; margin-bottom: 0.5rem;">✨ Pokémon Bebé</div>
+                    <div style="color: #555; line-height: 1.6;">Togepi es clasificado como un Pokémon bebé, lo que significa que es una forma juvenil de otro Pokémon. Solo puede ser obtenido como huevo en la mayoría de los juegos.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFE4F0, #FFB6D9); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1493;">
+                    <div style="font-weight: 700; color: #FF1493; margin-bottom: 0.5rem;">🎁 Habilidad de Felicidad</div>
+                    <div style="color: #555; line-height: 1.6;">Se cree que Togepi tiene la capacidad de absorber y difundir felicidad. La punta de su caparazón brilla cuando alguien experimentan alegría.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFE4F0, #FFB6D9); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1493;">
+                    <div style="font-weight: 700; color: #FF1493; margin-bottom: 0.5rem;">🎬 Apareción en el Anime</div>
+                    <div style="color: #555; line-height: 1.6;">Togepi es famoso por aparecer en la serie de anime de Pokémon como Pokémon de Misty. La acompaña durante varias temporadas del programa.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFE4F0, #FFB6D9); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1493;">
+                    <div style="font-weight: 700; color: #FF1493; margin-bottom: 0.5rem;">🛡️ Defensa Natural</div>
+                    <div style="color: #555; line-height: 1.6;">A pesar de ser pequeño y débil, Togepi tiene una notable defensa gracias a su caparazón protector. Puede resistir muchos ataques debido a su forma.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFE4F0, #FFB6D9); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1493;">
+                    <div style="font-weight: 700; color: #FF1493; margin-bottom: 0.5rem;">🌍 Tipo Hada</div>
+                    <div style="color: #555; line-height: 1.6;">Togepi fue reclasificado como tipo Hada en la Generación VI. Originalmente era de tipo Normal, pero ganó el tipo Hada junto con otros Pokémon en X y Y.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFE4F0, #FFB6D9); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1493;">
+                    <div style="font-weight: 700; color: #FF1493; margin-bottom: 0.5rem;">💎 Colecciones de Cartas</div>
+                    <div style="color: #555; line-height: 1.6;">Togepi es muy popular en colecciones de cartas Pokémon y tiene varias versiones holográficas raras que son muy buscadas por coleccionistas.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Información sobre Pokémon • Togepi #175 • Generación II</p>
+            <p>© 2024 Pokédex Interactiva</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animación de carga
+        document.addEventListener('DOMContentLoaded', function() {
+            const statBars = document.querySelectorAll('.stat-bar-fill');
+            statBars.forEach((bar, index) => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.transition = 'width 0.8s ease';
+                    bar.style.width = width;
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

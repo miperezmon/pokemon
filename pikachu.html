@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikachu - Pokédex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFCC00;
+            --secondary: #FF6B35;
+            --accent: #FF1744;
+            --bg-light: #FFFACD;
+            --bg-dark: #FFE4B5;
+            --text: #2c3e50;
+            --border: #FFCC00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFDAB9 50%, #FFE4E1 100%);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pokemon-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            color: var(--primary);
+            text-shadow: 3px 3px 0px var(--secondary), 6px 6px 0px rgba(0, 0, 0, 0.2);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .pokemon-number {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border: 3px solid var(--border);
+        }
+
+        .pokemon-image-container {
+            background: linear-gradient(135deg, #FFCC00, #FF6B35);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            border: 3px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pokemon-image {
+            max-width: 100%;
+            max-height: 350px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .info-item {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+
+        .types {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .type-electric {
+            background: #FFCC00;
+            color: #333;
+        }
+
+        .stats-container {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .stat-bar {
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .stat-bar-bg {
+            background: #E0E0E0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .abilities-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .ability-card {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px dashed var(--border);
+        }
+
+        .ability-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .ability-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .description-box {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 1.5rem 0;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .evolution-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 3px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .evolution-chain {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .evolution-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .evolution-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .evolution-arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .characteristics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .characteristic {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .char-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .char-label {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+
+        .char-value {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .pokemon-name {
+                font-size: 2.5rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .abilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evolution-chain {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="pokemon-name">PIKACHU</div>
+            <div class="pokemon-number">#025</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Imagen -->
+            <div class="pokemon-image-container">
+                <img src="pika2.png" alt="Pikachu" class="pokemon-image">
+            </div>
+
+            <!-- Información General -->
+            <div class="card">
+                <div class="section-title">Información General</div>
+                
+                <div class="info-section">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Tipo</div>
+                            <div class="types">
+                                <span class="type-badge type-electric">Eléctrico</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Altura</div>
+                            <div class="info-value">0.4 m</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Peso</div>
+                            <div class="info-value">6 kg</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Categoría</div>
+                            <div class="info-value">Ratón Eléctrico</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="description-box">
+                    Pikachu es el Pokémon mascota más famoso del mundo. Es un ratón amarillo de tamaño pequeño que almacena electricidad en sus mejillas. Puede descargar potentes ataques eléctricos para defenderse y alimentarse.
+                </div>
+
+                <div class="info-section">
+                    <div class="section-title" style="margin-top: 1.5rem;">Características</div>
+                    <div class="characteristics">
+                        <div class="characteristic">
+                            <div class="char-icon">⚡</div>
+                            <div class="char-label">Carácter</div>
+                            <div class="char-value">Valiente</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">💥</div>
+                            <div class="char-label">Habilidad</div>
+                            <div class="char-value">Electricidad Estática</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">🎂</div>
+                            <div class="char-label">Generación</div>
+                            <div class="char-value">I</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">⛰️</div>
+                            <div class="char-label">Hábitat</div>
+                            <div class="char-value">Montañas, Bosques</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="card full-width">
+            <div class="section-title">Estadísticas Base</div>
+            <div class="stats-container">
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>HP</span>
+                        <span>35</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 25%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Ataque</span>
+                        <span>55</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 37%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Defensa</span>
+                        <span>40</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 27%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Ataque Especial</span>
+                        <span>50</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 33%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Defensa Especial</span>
+                        <span>50</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 33%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Velocidad</span>
+                        <span>90</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Habilidades -->
+        <div class="card full-width">
+            <div class="section-title">Habilidades</div>
+            <div class="abilities-grid">
+                <div class="ability-card">
+                    <div class="ability-name">Electricidad Estática</div>
+                    <div class="ability-description">Puede paralizar a quien lo toque. Habilidad normal de Pikachu que genera campos electromagnéticos.</div>
+                </div>
+                <div class="ability-card">
+                    <div class="ability-name">Pararrayos</div>
+                    <div class="ability-description">Atrae ataques eléctricos hacia uno mismo. Habilidad oculta muy útil en batallas.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evolución -->
+        <div class="evolution-section">
+            <div class="section-title">Evolución</div>
+            <div class="evolution-chain">
+                <div class="evolution-item">
+                    <div class="evolution-name">Pichu</div>
+                    <div style="font-size: 2rem;">👶</div>
+                    <div style="color: #666; font-size: 0.9rem;">Forma Inicial</div>
+                </div>
+                <div style="font-size: 2rem; color: #FF6B35; align-self: center;">→</div>
+                <div class="evolution-item">
+                    <div class="evolution-name">Pikachu</div>
+                    <div style="font-size: 2rem;">⚡</div>
+                    <div style="color: #666; font-size: 0.9rem;">Forma Media</div>
+                </div>
+                <div style="font-size: 2rem; color: #FF6B35; align-self: center;">→</div>
+                <div class="evolution-item">
+                    <div class="evolution-name">Raichu</div>
+                    <div style="font-size: 2rem;">💪</div>
+                    <div style="color: #666; font-size: 0.9rem;">Forma Final</div>
+                </div>
+            </div>
+            <div class="description-box" style="margin-top: 1.5rem;">
+                ℹ️ Pikachu evoluciona de Pichu cuando desarrolla suficiente amistad con su entrenador. Posteriormente, puede evolucionar a Raichu usando una Piedra Trueno. En regiones específicas, puede tener formas alternativas como Alola Raichu.
+            </div>
+        </div>
+
+        <!-- Movimientos Especiales -->
+        <div class="card full-width">
+            <div class="section-title">Movimientos Especiales</div>
+            <div class="moves-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FFCC00;">
+                    <div style="font-weight: 700; color: #FF1744;">Trueno</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Eléctrico | Poder: 110 | Precisión: 70%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Ataque eléctrico potente del tipo rayo.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FFCC00;">
+                    <div style="font-weight: 700; color: #FF1744;">Rayo</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Eléctrico | Poder: 90 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Golpe relámpago fiable y preciso.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FFCC00;">
+                    <div style="font-weight: 700; color: #FF1744;">Rayo Voltio</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Eléctrico | Poder: 40 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Lanza una carga rápida de energía. Posibilidad de paralizar.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FFCC00;">
+                    <div style="font-weight: 700; color: #FF1744;">Bola Voltio</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Eléctrico | Poder: 50 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Bola de energía eléctrica explosiva.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FFCC00;">
+                    <div style="font-weight: 700; color: #FF1744;">Mordisco</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 60 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Muerde al oponente. Puede causarle miedo.</div>
+                </div>
+                <div class="move-card" style="background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid #FFCC00;">
+                    <div style="font-weight: 700; color: #FF1744;">Rápido</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Tipo: Normal | Poder: 40 | Precisión: 100%</div>
+                    <div style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">Ataque rápido. Aumenta la velocidad de Pikachu.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Localizaciones -->
+        <div class="card full-width">
+            <div class="section-title">Localizaciones en Juegos</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF6B35;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Rojo/Azul</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 2, 3, 4, 24, 25<br>
+                        <strong>Nivel:</strong> 3-25<br>
+                        <strong>Rareza:</strong> Bastante común
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF6B35;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Oro/Plata</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 32, Bosque Ilex<br>
+                        <strong>Nivel:</strong> 2-10<br>
+                        <strong>Rareza:</strong> Común
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF6B35;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Diamante/Perla</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 206, Valle Eterna<br>
+                        <strong>Nivel:</strong> 5-15<br>
+                        <strong>Rareza:</strong> Poco común
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF6B35;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">X/Y</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Ruta 3, Bosque de Déjà Vu<br>
+                        <strong>Nivel:</strong> 5-10<br>
+                        <strong>Rareza:</strong> Común
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF6B35;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Espada/Escudo</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Pradera de Wildentree<br>
+                        <strong>Nivel:</strong> 5-15<br>
+                        <strong>Rareza:</strong> Muy común
+                    </div>
+                </div>
+                <div class="location-card" style="background: var(--bg-light); padding: 1.2rem; border-radius: 8px; border: 2px solid #FF6B35;">
+                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Leyendas Pokémon</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <strong>Ubicación:</strong> Obsidiana Fields, Prado Floresta<br>
+                        <strong>Nivel:</strong> 10-20<br>
+                        <strong>Rareza:</strong> Común
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Datos Curiosos -->
+        <div class="card full-width">
+            <div class="section-title">Datos Curiosos</div>
+            <div style="display: grid; gap: 1rem;">
+                <div style="background: linear-gradient(135deg, #FFFACD, #FFE4B5); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1744;">
+                    <div style="font-weight: 700; color: #FF1744; margin-bottom: 0.5rem;">⭐ Mascota Oficial</div>
+                    <div style="color: #555; line-height: 1.6;">Pikachu es la mascota oficial de la franquicia Pokémon desde 1996. Su imagen ha aparecido en videojuegos, películas, series de televisión y productos de merchandising en todo el mundo.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFFACD, #FFE4B5); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1744;">
+                    <div style="font-weight: 700; color: #FF1744; margin-bottom: 0.5rem;">⚡ Poder Eléctrico</div>
+                    <div style="color: #555; line-height: 1.6;">Se dice que Pikachu puede generar hasta 100.000 voltios de electricidad en sus mejillas. Esta energía se utiliza para comunicarse con otros Pikachu y para defenderse de los depredadores.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFFACD, #FFE4B5); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1744;">
+                    <div style="font-weight: 700; color: #FF1744; margin-bottom: 0.5rem;">🎬 Estrella del Anime</div>
+                    <div style="color: #555; line-height: 1.6;">Pikachu ha sido el compañero principal de Ash Ketchum en la serie de televisión de Pokémon durante más de 25 años, siendo el Pokémon más recognizable de todas las generaciones.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFFACD, #FFE4B5); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1744;">
+                    <div style="font-weight: 700; color: #FF1744; margin-bottom: 0.5rem;">🌍 Presencia Global</div>
+                    <div style="color: #555; line-height: 1.6;">Pikachu ha trascendido el mundo de los videojuegos. Ha protagonizado películas de live-action, tiene su propio parque temático en Japón (Pikachu's Forest) y sus peluches son los artículos de Pokémon más vendidos.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFFACD, #FFE4B5); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1744;">
+                    <div style="font-weight: 700; color: #FF1744; margin-bottom: 0.5rem;">🎨 Diseño Icónico</div>
+                    <div style="color: #555; line-height: 1.6;">Pikachu fue diseñado por Ken Sugimori y su aspecto amarillo brillante, orejas negras puntiagudas y mejillas rojas lo hacen instantáneamente reconocible en el mundo entero.</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #FFFACD, #FFE4B5); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #FF1744;">
+                    <div style="font-weight: 700; color: #FF1744; margin-bottom: 0.5rem;">📱 Impacto Cultural</div>
+                    <div style="color: #555; line-height: 1.6;">En 2020, Pikachu fue nombrado como uno de los 50 iconos culturales más importantes de Japón. Su voz distintiva "Pika-pika" es una de las más reconocidas en la historia de los videojuegos.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Información sobre Pokémon • Pikachu #025 • Generación I</p>
+            <p>© 2024 Pokédex Interactiva</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animación de carga
+        document.addEventListener('DOMContentLoaded', function() {
+            const statBars = document.querySelectorAll('.stat-bar-fill');
+            statBars.forEach((bar, index) => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.transition = 'width 0.8s ease';
+                    bar.style.width = width;
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

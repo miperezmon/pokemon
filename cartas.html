@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Cartas Pokémon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --text: #2c3e50;
+            --light-bg: #f8f9fa;
+            --border: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0e7ff, #f3e8ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .detail-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #95a5a6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section h2 {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .card-image {
+                height: 250px;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .pokemon-title {
+            font-family: 'Fredoka One', cursive;
+            text-align: center;
+            color: var(--primary);
+            text-shadow: 3px 3px 0px var(--secondary), 6px 6px 0px rgba(0, 0, 0, 0.1);
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⭐⭐⭐Galería de Cartas⭐⭐⭐</h1>
+            <p>Explora nuestros POKÉMON favoritos</p>
+        </div>
+
+        <div class="cards-grid">
+            <!-- Carta 1 -->
+            <div class="card" onclick="window.location.href='pachi.html'" style="cursor: pointer;">
+                <div class="card-image">
+                    <img src="pk1.png" alt="Carta Pokemon 1">
+                </div>
+                <div class="card-content">
+                    <h3 class="pokemon-title">PACHIRISU</h3>
+                    <p class="card-description">Pokémon ardilla eléctrico. Su nombre viene de las palabras japonesas パチパチ pachipachi (chisporroteo) y 栗鼠 risu (ardilla).</p>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Número</div>
+                            <div class="detail-value">001</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rareza</div>
+                            <div class="detail-value">⭐⭐⭐</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Condición</div>
+                            <div class="detail-value">Mint</div>
+                        </div>
+                    </div>
+                    <span class="badge">Edición Limitada</span>
+                </div>
+            </div>
+
+            <!-- Carta 2 -->
+            <div class="card" onclick="window.location.href='togepi.html'" style="cursor: pointer;">
+                <div class="card-image">
+                    <img src="pk2.png" alt="Carta Pokemon 2">
+                </div>
+                <div class="card-content">
+                    <h3 class="pokemon-title">TOGEPI</h3>
+                    <p class="card-description">Su nombre viene del japonés toge (espinas o púas) y pi (pequeño).</p>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Número</div>
+                            <div class="detail-value">002</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rareza</div>
+                            <div class="detail-value">⭐⭐⭐</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Condición</div>
+                            <div class="detail-value">Mint</div>
+                        </div>
+                    </div>
+                    <span class="badge">Edición Limitada</span>
+                </div>
+            </div>
+            <!-- Carta 3 -->
+            <div class="card" onclick="window.location.href='pikachu.html'" style="cursor: pointer;">
+                <div class="card-image">
+                    <img src="pika2.png" alt="Carta Pikachu">
+                </div>
+                <div class="card-content">
+                    <h3 class="pokemon-title">PIKACHU</h3>
+                    <p class="card-description">El clásico ratón eléctrico. Una carta imprescindible en cualquier colección.</p>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Número</div>
+                            <div class="detail-value">003</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rareza</div>
+                            <div class="detail-value">⭐⭐⭐⭐</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Condición</div>
+                            <div class="detail-value">Near Mint</div>
+                        </div>
+                    </div>
+                    <span class="badge">Edición Limitada</span>
+                </div>
+            </div>
+
+            <!-- Carta 4 -->
+            <div class="card" onclick="window.location.href='chimchar.html'" style="cursor: pointer;">
+                <div class="card-image">
+                    <img src="chimchar.png" alt="Carta Chimchar">
+                </div>
+                <div class="card-content">
+                    <h3 class="pokemon-title">CHIMCHAR</h3>
+                    <p class="card-description">Pokémon tipo fuego inspirado en un chimpancé. Mantiene un fuego en su cola.</p>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Número</div>
+                            <div class="detail-value">004</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rareza</div>
+                            <div class="detail-value">⭐⭐⭐</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Condición</div>
+                            <div class="detail-value">Mint</div>
+                        </div>
+                    </div>
+                    <span class="badge">Edición Limitada</span>
+                </div>
+            </div>
+
+            <!-- Carta 5 -->
+            <div class="card" onclick="window.location.href='spheal.html'" style="cursor: pointer;">
+                <div class="card-image">
+                    <img src="Spheal.png" alt="Carta Spheal">
+                </div>
+                <div class="card-content">
+                    <h3 class="pokemon-title">SPHEAL</h3>
+                    <p class="card-description">Pequeño Pokémon tipo agua/hielo inspirado en una foca. Muy adorable y resistente.</p>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Número</div>
+                            <div class="detail-value">005</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rareza</div>
+                            <div class="detail-value">⭐⭐⭐</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Condición</div>
+                            <div class="detail-value">Mint</div>
+                        </div>
+                    </div>
+                    <span class="badge">Edición Limitada</span>
+                </div>
+            </div>
+
+            <!-- Carta 6 -->
+            <div class="card" onclick="window.location.href='bulbasaur.html'" style="cursor: pointer;">
+                <div class="card-image">
+                    <img src="Bulbasaur.png" alt="Carta Bulbasaur">
+                </div>
+                <div class="card-content">
+                    <h3 class="pokemon-title">BULBASAUR</h3>
+                    <p class="card-description">Pokémon inicial tipo planta/veneno. Una clásica carta de Kanto muy buscada.</p>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Número</div>
+                            <div class="detail-value">006</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rareza</div>
+                            <div class="detail-value">⭐⭐⭐⭐</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Condición</div>
+                            <div class="detail-value">Near Mint</div>
+                        </div>
+                    </div>
+                    <span class="badge">Edición Limitada</span>
+                </div>
+            </div>
+
+        <!-- Fin de la galería de cartas -->
+    </div>
+
+    <script>
+        // Efecto de animación al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

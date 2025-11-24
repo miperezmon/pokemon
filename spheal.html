@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spheal - Pokédex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00BFFF;
+            --secondary: #1E90FF;
+            --accent: #87CEEB;
+            --bg-light: #E0F6FF;
+            --bg-dark: #B3E5FC;
+            --text: #2c3e50;
+            --border: #00BFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E0F6FF 0%, #B3E5FC 50%, #81D4FA 100%);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pokemon-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            color: var(--primary);
+            text-shadow: 3px 3px 0px var(--secondary), 6px 6px 0px rgba(0, 0, 0, 0.2);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .pokemon-number {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border: 3px solid var(--border);
+        }
+
+        .pokemon-image-container {
+            background: linear-gradient(135deg, #00BFFF, #1E90FF);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            border: 3px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pokemon-image {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .info-item {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+
+        .types {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .type-water {
+            background: #00BFFF;
+            color: white;
+        }
+
+        .type-ice {
+            background: #87CEEB;
+            color: #333;
+        }
+
+        .stats-container {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .stat-bar {
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .stat-bar-bg {
+            background: #E0E0E0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .abilities-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .ability-card {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px dashed var(--border);
+        }
+
+        .ability-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .ability-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .description-box {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 1.5rem 0;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .evolution-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 3px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .evolution-chain {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .evolution-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .evolution-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .evolution-arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .characteristics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .characteristic {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .char-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .char-label {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+
+        .char-value {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .pokemon-name {
+                font-size: 2.5rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .abilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evolution-chain {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="pokemon-name">SPHEAL</div>
+            <div class="pokemon-number">#363</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Imagen -->
+            <div class="pokemon-image-container">
+                <img src="Spheal.png" alt="Spheal" class="pokemon-image">
+            </div>
+
+            <!-- Información General -->
+            <div class="card">
+                <div class="section-title">Información General</div>
+                
+                <div class="info-section">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Tipo</div>
+                            <div class="types">
+                                <span class="type-badge type-water">Agua</span>
+                                <span class="type-badge type-ice">Hielo</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Altura</div>
+                            <div class="info-value">0.8 m</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Peso</div>
+                            <div class="info-value">39.8 kg</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Categoría</div>
+                            <div class="info-value">Pokémon Foca</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="description-box">
+                    Spheal es un pequeño Pokémon tipo agua/hielo inspirado en una foca. Su cuerpo redondo le permite rodar y deslizarse sobre el hielo. Vive en aguas frías y glaciares.
+                </div>
+
+                <div class="info-section">
+                    <div class="section-title" style="margin-top: 1.5rem;">Características</div>
+                    <div class="characteristics">
+                        <div class="characteristic">
+                            <div class="char-icon">❄️</div>
+                            <div class="char-label">Carácter</div>
+                            <div class="char-value">Suave</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">💧</div>
+                            <div class="char-label">Habilidad</div>
+                            <div class="char-value">Cuerpo Puro</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">🎂</div>
+                            <div class="char-label">Generación</div>
+                            <div class="char-value">III</div>
+                        </div>
+                        <div class="characteristic">
+                            <div class="char-icon">❄️🌊</div>
+                            <div class="char-label">Hábitat</div>
+                            <div class="char-value">Hielo, Océanos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="card full-width">
+            <div class="section-title">Estadísticas Base</div>
+            <div class="stats-container">
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>HP</span>
+                        <span>70</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 47%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Ataque</span>
+                        <span>40</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 27%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Defensa</span>
+                        <span>50</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 33%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Ataque Especial</span>
+                        <span>70</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 47%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Defensa Especial</span>
+                        <span>100</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 67%"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">
+                        <span>Velocidad</span>
+                        <span>25</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" style="width: 17%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Habilidades -->
+        <div class="card full-width">
+            <div class="section-title">Habilidades</div>
+            <div class="abilities-grid">
+                <div class="ability-card">
+                    <div class="ability-name">Cuerpo Puro</div>
+                    <div class="ability-description">Impide que los movimientos baje los stats de Spheal. Habilidad común de Spheal.</div>
+                </div>
+                <div class="ability-card">
+                    <div class="ability-name">Grueso Adiposo</div>
+                    <div class="ability-description">Reduce el daño de movimientos de fuego y hielo a la mitad. Habilidad oculta.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evolución -->
+        <div class="evolution-section">
+            <div class="section-title">Evolución</div>
+            <div class="evolution-chain">
+                <div class="evolution-item">
+                    <div class="evolution-name">Spheal</div>
+                    <div style="font-size: 2rem;">🦭</div>
+                    <div style="color: #666; font-size: 0.9rem;">Forma Inicial</div>
+                </div>
+                <div style="font-size: 2rem; color: #1E90FF; align-self: center;">→</div>
+                <div class="evolution-item">
+                    <div class="evolution-name">Sealeo</div>
+                    <div style="font-size: 2rem;">🏐</div>
+                    <div style="color: #666; font-size: 0.9rem;">Forma Media</div>
+                </div>
+                <div style="font-size: 2rem; color: #1E90FF; align-self: center;">→</div>
+                <div class="evolution-item">
+                    <div class="evolution-name">Walrein</div>
+                    <div style="font-size: 2rem;">🦣</div>
+                    <div style="color: #666; font-size: 0.9rem;">Forma Final</div>
+                </div>
+            </div>
+            <div class="description-box" style="margin-top: 1.5rem;">
+                ℹ️ Spheal evoluciona a Sealeo en el nivel 32. Posteriormente, evoluciona a Walrein en el nivel 44. Walrein es la forma final y es un Pokémon mucho más grande y poderoso.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Información sobre Pokémon • Spheal #363 • Generación III</p>
+            <p>© 2024 Pokédex Interactiva</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animación de carga
+        document.addEventListener('DOMContentLoaded', function() {
+            const statBars = document.querySelectorAll('.stat-bar-fill');
+            statBars.forEach((bar, index) => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.transition = 'width 0.8s ease';
+                    bar.style.width = width;
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
